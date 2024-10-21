@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../context/ContextProvider';
+import { useContextProvider } from '../../context/ContextProvider';
 import '../../styles/Auth.css'; 
 
 const Signup = ({ toggleForm }) => {
-    const { register } = useAuth();
+    const { register } = useContextProvider();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

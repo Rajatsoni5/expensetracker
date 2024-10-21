@@ -5,7 +5,7 @@ import { app } from "../firebase/firebaseConfig";
 const Context = createContext();
 const auth = getAuth(app);
 
-export const AuthProvider = ({ children }) => {
+export const ContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const register = async (email, password) => {
@@ -43,6 +43,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => {
+export const useContextProvider = () => {
   return useContext(Context);
 };

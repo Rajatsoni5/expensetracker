@@ -2,7 +2,9 @@ import React from 'react'
 
 function Dashboard() {
   return (
-    <div>Dashboard</div>
+    <div>
+      <h1>Welcome to Expense Tracker</h1>
+    </div>
   )
 }
 
