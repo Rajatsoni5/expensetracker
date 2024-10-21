@@ -1,0 +1,21 @@
+.dashboard-container {
+    font-style: italic;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px 0px 0px ;
+  }
+  
+  p {
+    background-color: #e5925e;
+    border-radius: 5px;
+    padding: 3px;
+  }
+  
+  button {
+    background-color: #e5925e;
+    color: blue;
+    border: none;
+    border-radius: 5px; 
+ }
+
+  

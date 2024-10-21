@@ -1,16 +1,26 @@
 .auth-container {
-    width: 400px; /* Fixed width */
-    margin: auto; /* Center the container */
-    padding: 20px; /* Padding inside the box */
-    border: 1px solid #ccc; /* Border styling */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-}
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1000;
+  }
+  
+  .auth-title {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .auth-button {
+    width: 100%;
+  }
+  
+  .alert {
+    margin-bottom: 15px;
+  }
+  
 
-.auth-title {
-    text-align: center; /* Center the title */
-}
-
-.auth-button {
-    width: 100%; /* Full width button */
-}
+  

@@ -3,11 +3,9 @@ import React, { useState } from "react";
 import { useContextProvider } from "../../context/ContextProvider";
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ toggleForm }) => {
-
-  const { login } = useContextProvider();
+const Login = () => {
+  const { login, toggleForm } = useContextProvider();
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +22,7 @@ const Login = ({ toggleForm }) => {
     try {
       await login(email, password);
       console.log("User has successfully logged in.");
-      navigate("./dashboard")
+      navigate("./dashboard");
       setEmail("");
       setPassword("");
     } catch (err) {
@@ -33,14 +31,12 @@ const Login = ({ toggleForm }) => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-container" >
       <h2 className="auth-title">Login</h2>
       {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
+          <label htmlFor="email" className="form-label">Email</label>
           <input
             type="email"
             className="form-control"
@@ -51,9 +47,7 @@ const Login = ({ toggleForm }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
+          <label htmlFor="password" className="form-label">Password</label>
           <input
             type="password"
             className="form-control"
@@ -63,7 +57,7 @@ const Login = ({ toggleForm }) => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary auth-button">
+        <button type="submit" className={`btn btn-primary auth-button`}>
           Login
         </button>
       </form>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useContextProvider } from '../../context/ContextProvider';
-import '../../styles/Auth.css'; 
+import "../../styles/Auth.css";
 
-const Signup = ({ toggleForm }) => {
-    const { register } = useContextProvider();
+const Signup = () => {
+    const { register, toggleForm } = useContextProvider();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -72,7 +72,7 @@ const Signup = ({ toggleForm }) => {
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-primary auth-button">Sign Up</button>
+                <button type="submit" className={`btn btn-primary auth-button`}>Sign Up</button>
             </form>
             <p className="mt-3 text-center">
                 Already have an account? <button className="btn btn-link" onClick={toggleForm}>Login</button>

@@ -6,14 +6,18 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { ContextProvider } from './context/ContextProvider';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <ContextProvider>
+  <Router>
+      <ContextProvider>
     <App />
   </ContextProvider>
+  </Router>
+
 );
 
 // If you want to start measuring performance in your app, pass a function
