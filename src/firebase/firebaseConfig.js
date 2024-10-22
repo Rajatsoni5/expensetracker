@@ -4,6 +4,9 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyAY-wgqIt319Lx0cjS2LywB4qq26m-FMAI",
   authDomain: "expensetracker-3957a.firebaseapp.com",
@@ -14,6 +17,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
-export { app }; 
+
+// export { app }; 

@@ -33,7 +33,9 @@ const Login = () => {
   return (
     <div className="auth-container" >
       <h2 className="auth-title">Login</h2>
+
       {error && <div className="alert alert-danger">{error}</div>}
+
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email</label>
@@ -61,6 +63,7 @@ const Login = () => {
           Login
         </button>
       </form>
+      
       <p className="mt-3 text-center">
         New user?{" "}
         <button className="btn btn-link" onClick={toggleForm}>

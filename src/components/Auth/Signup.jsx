@@ -4,6 +4,7 @@ import "../../styles/Auth.css";
 
 const Signup = () => {
     const { register, toggleForm } = useContextProvider();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -25,7 +26,6 @@ const Signup = () => {
 
         try {
             await register(email, password);
-            console.log('User has successfully signed up.');
             setEmail('');
             setPassword('');
             setConfirmPassword('');
