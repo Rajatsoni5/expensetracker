@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Modal from './ProfileModal'; 
 import { getAuth } from 'firebase/auth'; 
 import { useContextProvider } from "../../context/ContextProvider";
+import ExpenseForm from "./ExpenseForm";
 
 
 function Dashboard() {
@@ -94,6 +95,7 @@ function Dashboard() {
           <button onClick={logout}>Logout</button>
       </div>
       <hr />
+      <ExpenseForm />
       <Modal 
         isModalOpen={isModalOpen} 
         setIsModalOpen={() => setIsModalOpen(false)} 
