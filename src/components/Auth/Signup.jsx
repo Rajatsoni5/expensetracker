@@ -14,11 +14,6 @@ const Signup = () => {
         e.preventDefault();
         setError('');
 
-        if (!email || !password || !confirmPassword) {
-            setError('All fields are mandatory.');
-            return;
-        }
-
         if (password !== confirmPassword) {
             setError('Passwords do not match.');
             return;
@@ -72,7 +67,7 @@ const Signup = () => {
                         required
                     />
                 </div>
-                <button type="submit" className={`btn btn-primary auth-button`}>Sign Up</button>
+                <button type="submit" className={`btn btn-primary authutton`}>Sign Up</button>
             </form>
             <p className="mt-3 text-center">
                 Already have an account? <button className="btn btn-link" onClick={toggleForm}>Login</button>

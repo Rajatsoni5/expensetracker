@@ -1,35 +1,36 @@
+import "../../styles/Dashboard.css";
 import React, { useState } from 'react';
 import Modal from './ProfileModal'; 
 import { getAuth } from 'firebase/auth'; 
-import "../../styles/Dashboard.css";
-import { useNavigate } from 'react-router-dom';
+import { useContextProvider } from "../../context/ContextProvider";
+
 
 function Dashboard() {
-  const url = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAY-wgqIt319Lx0cjS2LywB4qq26m-FMAI`;
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const {logout} = useContextProvider()
   const auth = getAuth(); 
-  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const currentUser = auth.currentUser; 
+
+  console.log("user", currentUser);
 
   const handleProfile = () => {
     setIsModalOpen(true);
+    console.log("clikced")
   };
 
-  const user = auth.currentUser; 
-
-  console.log("user", user);
-
-  
-
   const handleUpdateProfile = async (fullName, photoURL) => {
-    if (user) {
+    if (currentUser) {
       try {
-        const response = await fetch(url, {
+        const response = await fetch(
+          `${process.env.REACT_APP_FIREBASE_API}/accounts:update?key=${process.env.REACT_APP_FIREBASE_API_KEY}`,
+          {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            idToken: user.accessToken,
+            idToken: currentUser.accessToken,
             displayName: fullName,
             photoUrl: photoURL,
             returnSecureToken: true,
@@ -53,17 +54,19 @@ function Dashboard() {
   };
 
   const verifyEmail = async () => {
-    if (user) {
+    if (currentUser) {
       try {
-        const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyAY-wgqIt319Lx0cjS2LywB4qq26m-FMAI`, {
+        const response = await fetch(
+          `${process.env.REACT_APP_FIREBASE_API}/accounts:sendOobCode?key=${process.env.REACT_APP_FIREBASE_API_KEY}`,
+         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
+          body: {
             requestType: "VERIFY_EMAIL",
-            idToken: user.accessToken,
-          }),
+            idToken: currentUser.accessToken,
+          },
         });
       
         const data = await response.json();
@@ -80,25 +83,22 @@ function Dashboard() {
     }
   }
 
-  const logout = async () => {
-   await  auth.signOut().then(() => console.log('User signed out!'));
-navigate("/");
-  }
+
   return (
     <>
       <div className='dashboard-container'>
         <h4>Welcome to Expense Tracker!!!</h4>
         <p>Your Profile is incomplete. <button onClick={handleProfile}> Complete now</button></p>
-        {!user?.emailVerified && (
+        {!currentUser?.emailVerified && (
           <button onClick={verifyEmail}>Verify Email</button>)}
           <button onClick={logout}>Logout</button>
       </div>
       <hr />
       <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        isModalOpen={isModalOpen} 
+        setIsModalOpen={() => setIsModalOpen(false)} 
         onUpdate={handleUpdateProfile}
-        user={user}
+        currentUser={currentUser}
       />
     </>
   );

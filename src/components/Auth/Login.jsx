@@ -4,8 +4,9 @@ import { useContextProvider } from "../../context/ContextProvider";
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { login, toggleForm } = useContextProvider();
+  const { login, toggleForm,togglePassword } = useContextProvider();
   const navigate = useNavigate();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -13,11 +14,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
-    if (!email || !password) {
-      setError("Both fields are mandatory.");
-      return;
-    }
 
     try {
       await login(email, password);
@@ -63,7 +59,11 @@ const Login = () => {
           Login
         </button>
       </form>
-      
+      <p className="mt-3 text-center">
+        <button className="btn btn-link" onClick={togglePassword}>
+          Forgot Password
+        </button>
+      </p>
       <p className="mt-3 text-center">
         New user?{" "}
         <button className="btn btn-link" onClick={toggleForm}>

@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/ProfileModal.css"
+import { useContextProvider } from '../../context/ContextProvider';
 
-const ProfileModal = ({ isOpen, onClose, onUpdate, user }) => {
+const ProfileModal = ({ currentUser, isModalOpen, setIsModalOpen }) => {
+
+  const { handleUpdateProfile} = useContextProvider();
+
   const [fullName, setFullName] = useState("");
   const [photoURL, setPhotoURL] = useState("");
 
   const handleUpdate = () => {
-    onUpdate(fullName, photoURL);
+    handleUpdateProfile(fullName, photoURL);
     setFullName('');
     setPhotoURL('');
   };
 
   useEffect(() => {
-    setFullName(user?.displayName);
-    setPhotoURL(user?.photoURL)
-  }, [user])
+    setFullName(currentUser?.displayName);
+    setPhotoURL(currentUser?.photoURL)
+  }, [currentUser])
 
-  if (!isOpen) return null;
+  if (!isModalOpen) return null;
 
   return (
     <div className="modal-overlay">
@@ -39,7 +43,7 @@ const ProfileModal = ({ isOpen, onClose, onUpdate, user }) => {
           />
         </label>
         <button onClick={handleUpdate}>Update</button>
-        <button onClick={onClose}>Cancel</button>
+        <button onClick={setIsModalOpen}>Cancel</button>
       </div>
     </div>
   );
