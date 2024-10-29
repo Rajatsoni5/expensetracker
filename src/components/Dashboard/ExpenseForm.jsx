@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ExpenseList from "./ExpenseList";
+import { databaseURL } from "../../firebase/firebaseConfig";
 
 const ExpenseForm = () => {
   const [expenseData, setExpenseData] = useState([]);
@@ -7,13 +8,11 @@ const ExpenseForm = () => {
   const [desc, setDesc] = useState("");
   const [category, setCategory] = useState("");
 
-  const databaseURL = "https://expensetracker-3957a-default-rtdb.asia-southeast1.firebasedatabase.app"; 
-
   // Fetch expenses from Realtime Database on component mount
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await fetch(`${databaseURL}/expense.json`);
+        const response = await fetch(`${databaseURL}/expenses.json`);
         const data = await response.json();
 
         if (data) {
@@ -35,7 +34,7 @@ const ExpenseForm = () => {
     const expense = { amount, desc, category };
 
     try {
-      const response = await fetch(`${databaseURL}/expense.json`, {
+      const response = await fetch(`${databaseURL}/expenses.json`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +107,7 @@ const ExpenseForm = () => {
           </button>
         </form>
       </div>
-      <ExpenseList expenseData={expenseData} />
+      <ExpenseList expenseData={expenseData} setExpenseData={setExpenseData}/>
     </>
   );
 };

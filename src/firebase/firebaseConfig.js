@@ -19,7 +19,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-
+export const databaseURL = "https://expensetracker-3957a-default-rtdb.asia-southeast1.firebasedatabase.app";
 const database = getDatabase(app);
 
 export { database };
