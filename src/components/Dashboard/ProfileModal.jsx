@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/ProfileModal.css"
-import { useContextProvider } from '../../context/ContextProvider';
 
-const ProfileModal = ({ currentUser, isModalOpen, setIsModalOpen }) => {
-
-  const { handleUpdateProfile} = useContextProvider();
+const ProfileModal = ({ currentUser, isModalOpen, setIsModalOpen, onUpdate }) => {
 
   const [fullName, setFullName] = useState("");
   const [photoURL, setPhotoURL] = useState("");
 
   const handleUpdate = () => {
-    handleUpdateProfile(fullName, photoURL);
+    onUpdate(fullName, photoURL);
     setFullName('');
     setPhotoURL('');
   };
 
   useEffect(() => {
-    setFullName(currentUser?.displayName);
-    setPhotoURL(currentUser?.photoURL)
+    setFullName(currentUser?.displayName || "");
+    setPhotoURL(currentUser?.photoURL || "")
   }, [currentUser])
 
   if (!isModalOpen) return null;
@@ -43,7 +40,7 @@ const ProfileModal = ({ currentUser, isModalOpen, setIsModalOpen }) => {
           />
         </label>
         <button onClick={handleUpdate}>Update</button>
-        <button onClick={setIsModalOpen}>Cancel</button>
+        <button onClick={() =>setIsModalOpen(false)}>Cancel</button>
       </div>
     </div>
   );

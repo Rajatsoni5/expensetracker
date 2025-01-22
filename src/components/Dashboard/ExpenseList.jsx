@@ -13,7 +13,6 @@ const ExpenseList = ({ expenseData, setExpenseData }) => {
       await fetch(`${databaseURL}/expenses/${id}.json`, {
         method: "DELETE",
       });
-
       setExpenseData(expenseData.filter((item) => item.id !== id));
       console.log("Expense successfully deleted");
     } catch (error) {
@@ -21,8 +20,6 @@ const ExpenseList = ({ expenseData, setExpenseData }) => {
     }
   };
     
-  
-
   const handleEdit = (item) => {
     setEditingId(item.id);
     setEditAmount(item.amount);

@@ -18,7 +18,6 @@ const Signup = () => {
             setError('Passwords do not match.');
             return;
         }
-
         try {
             await register(email, password);
             setEmail('');
@@ -33,6 +32,7 @@ const Signup = () => {
         <div className="auth-container">
             <h2 className="auth-title">Sign Up</h2>
             {error && <div className="alert alert-danger">{error}</div>}
+            
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email</label>
@@ -67,7 +67,7 @@ const Signup = () => {
                         required
                     />
                 </div>
-                <button type="submit" className={`btn btn-primary authutton`}>Sign Up</button>
+                <button type="submit" className={`btn btn-primary auth-button`}>Sign Up</button>
             </form>
             <p className="mt-3 text-center">
                 Already have an account? <button className="btn btn-link" onClick={toggleForm}>Login</button>

@@ -5,8 +5,6 @@ import { useContextProvider } from "../../context/ContextProvider";
 
 const PasswordChange = () => {
     const {toggleForm} = useContextProvider();
-
-
     const [resetEmail, setResetEmail ] = useState("");
     const [error, setError] = useState("")
     

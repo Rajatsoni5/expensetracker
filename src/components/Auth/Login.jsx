@@ -1,12 +1,10 @@
 import "../../styles/Auth.css";
 import React, { useState } from "react";
 import { useContextProvider } from "../../context/ContextProvider";
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { login, toggleForm,togglePassword } = useContextProvider();
-  const navigate = useNavigate();
-  
+  const { login, toggleForm, togglePassword } = useContextProvider();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,8 +15,6 @@ const Login = () => {
 
     try {
       await login(email, password);
-      console.log("User has successfully logged in.");
-      navigate("./dashboard");
       setEmail("");
       setPassword("");
     } catch (err) {
@@ -27,14 +23,16 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container" >
+    <div className="auth-container">
       <h2 className="auth-title">Login</h2>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email</label>
+          <label htmlFor="email" className="form-label">
+            Email
+          </label>
           <input
             type="email"
             className="form-control"
@@ -45,7 +43,9 @@ const Login = () => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password</label>
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
           <input
             type="password"
             className="form-control"

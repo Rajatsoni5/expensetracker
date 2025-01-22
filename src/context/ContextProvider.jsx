@@ -1,9 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,} from "firebase/auth";
 import { app } from "../firebase/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,65 +8,72 @@ const Context = createContext();
 const auth = getAuth(app);
 
 export const ContextProvider = ({ children }) => {
-
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [isLogin, setIsLogin] = useState(true);
 
-  const [user, setUser] = useState();
-  const [isLogin, setIsLogin] = useState(true); 
+  // Listen for authentication state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe(); // Cleanup listener on component unmount
+  }, []);
 
-  // - Initially this toggle form help the user to shift to form, according to his visit (already user or new).
+  // Toggle between login and signup forms
   const toggleForm = () => {
     setIsLogin(!isLogin);
-    isLogin ? navigate("/signup") : navigate("/");
+    isLogin ? navigate("/") : navigate("/signup");
   };
-  // - Incase, User forgot password, this function will help user to reach password reset page and get reset email.
+
+  // Toggle to password reset page
   const togglePassword = () => {
     setIsLogin(!isLogin);
-    isLogin ? navigate("/reset") : navigate("/");
-  }
-  // - this function settle here for new user to sign up.
+    isLogin ? navigate("/") : navigate("/reset");
+  };
+
+  // Function for user registration
   const register = async (email, password) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
-      toast.success("User has successfully signed up.", {
-        position: "top-center",
-      });
+      toast.success("User registered successfully!", { position: "top-center" });
       navigate("/dashboard");
     } catch (error) {
-      console.log(error.message);
-      toast.success(error.message, { position: "top-center" });
+      console.error(error.message);
+      toast.error(error.message, { position: "top-center" });
     }
   };
 
-  // - this function settle here for existing user to log in.
+  // Function for user login
   const login = async (email, password) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
-      toast.success("User has successfully logged in.", {
-        position: "top-center",
-      });
-
+      toast.success("User logged in successfully!", { position: "top-center" });
+      console.log(userCredential.user)
       navigate("/dashboard");
     } catch (error) {
-      console.log(error.message);
-      toast.success(error.message, { position: "top-center" });
+      console.error(error.message);
+      toast.error(error.message, { position: "top-center" });
     }
   };
 
-  //- this function settle here to logout.
+  // Function for user logout
   const logout = async () => {
-    await auth.signOut().then(() => console.log("User signed out!"));
-    navigate("/");
+    try {
+      await signOut(auth);
+      setUser(null);
+      toast.success("User logged out successfully!", { position: "top-center" });
+      navigate("/");
+    } catch (error) {
+      console.error("Error during logout:", error.message);
+      toast.error(error.message, { position: "top-center" });
+    }
   };
 
   return (
