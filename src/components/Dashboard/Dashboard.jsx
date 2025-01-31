@@ -79,6 +79,7 @@ function Dashboard() {
         if (!response.ok) {
           throw new Error(data.error.message);
         }
+        const token = localStorage.setItem("user");
         console.log("Link sent for verification");
       } catch (error) {
         console.error("Error sending verification email:", error);
