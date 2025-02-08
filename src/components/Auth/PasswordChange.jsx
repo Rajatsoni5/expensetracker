@@ -1,10 +1,12 @@
 import "../../styles/Auth.css";
 import React, { useState } from "react";
-import axios from 'axios';
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+
 import { useContextProvider } from "../../context/ContextProvider";
 
 const PasswordChange = () => {
     const {toggleForm} = useContextProvider();
+
     const [resetEmail, setResetEmail ] = useState("");
     const [error, setError] = useState("")
     
@@ -15,21 +17,10 @@ const PasswordChange = () => {
         if(!resetEmail) return;
 
         try {
-          const response = await axios.post(
-            `${process.env.REACT_APP_FIREBASE_API}/accounts:sendOobCode?key=${process.env.REACT_APP_FIREBASE_API_KEY}`,
-            {
-              requestType: "PASSWORD_RESET",
-              email: resetEmail,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-          console.log('Password reset email sent:', response.data);
+          await sendPasswordResetEmail(getAuth(), resetEmail);
+          console.log('Password reset email sent');
         } catch (error) {
-          console.error('Error sending password reset email:', error.response ? error.response.data : error.message);
+          console.error('Error sending password reset email:',error.message);
         }
     }
   return (

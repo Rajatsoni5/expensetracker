@@ -4,8 +4,8 @@ import expensesSlice from './slices/expenseSlice';
 
 const store = configureStore({
     reducer: {
-      auth: authSlice.reducer,
-      expenses: expensesSlice.reducer,
+      auth: authSlice,
+      expenses: expensesSlice,
     },
   });
 export default store;

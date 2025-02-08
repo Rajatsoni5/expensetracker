@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
-import { useContextProvider } from '../../context/ContextProvider';
 import "../../styles/Auth.css";
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useContextProvider } from "../../context/ContextProvider";
+import { login } from "../../reduxStore/slices/authSlice";
 
 const Signup = () => {
-    const { register, toggleForm } = useContextProvider();
+    const auth = getAuth();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { toggleForm } = useContextProvider();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,12 +27,18 @@ const Signup = () => {
             return;
         }
         try {
-            await register(email, password);
-            setEmail('');
-            setPassword('');
-            setConfirmPassword('');
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        dispatch(login({ user: user, userID: user.uid, bearerToken: user.accessToken }));
+
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        navigate("/dashboard");
+
         } catch (err) {
-            setError(err.message);
+            setError("Something went Wrong, please try again");
         }
     };
 

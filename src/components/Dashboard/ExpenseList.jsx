@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem, editItem } from '../../reduxStore/slices/expenseSlice';
 import "../../styles/expenseList.css";
 import { databaseURL } from "../../firebase/firebaseConfig";
 
-const ExpenseList = ({ expenseData, setExpenseData }) => {
+const ExpenseList = () => {
+  const dispatch = useDispatch();
+  const expenseData = useSelector((state) => state.expenses.items);
+
   const [editingId, setEditingId] = useState(null);
   const [editAmount, setEditAmount] = useState("");
   const [editDesc, setEditDesc] = useState("");
@@ -10,16 +15,14 @@ const ExpenseList = ({ expenseData, setExpenseData }) => {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`${databaseURL}/expenses/${id}.json`, {
-        method: "DELETE",
-      });
-      setExpenseData(expenseData.filter((item) => item.id !== id));
+      await fetch(`${databaseURL}/expenses/${id}.json`, { method: "DELETE" });
+      dispatch(removeItem({ id })); 
       console.log("Expense successfully deleted");
     } catch (error) {
       console.error("Error deleting expense:", error);
     }
   };
-    
+
   const handleEdit = (item) => {
     setEditingId(item.id);
     setEditAmount(item.amount);
@@ -28,28 +31,17 @@ const ExpenseList = ({ expenseData, setExpenseData }) => {
   };
 
   const handleSave = async () => {
-    const updatedExpense = {
-      amount: editAmount,
-      desc: editDesc,
-      category: editCategory,
-    };
+    const updatedExpense = { id: editingId, amount: editAmount, desc: editDesc, category: editCategory };
 
     try {
       await fetch(`${databaseURL}/expenses/${editingId}.json`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedExpense),
       });
 
-      setExpenseData(
-        expenseData.map((item) =>
-          item.id === editingId ? { id: editingId, ...updatedExpense } : item
-        )
-      );
-
-      setEditingId(null); 
+      dispatch(editItem({ item: updatedExpense }));
+      setEditingId(null);
       console.log("Expense successfully updated");
     } catch (error) {
       console.error("Error updating expense:", error);
@@ -58,6 +50,7 @@ const ExpenseList = ({ expenseData, setExpenseData }) => {
 
   return (
     <div className='expense-container'>
+      
       {expenseData?.map((item) => (
         <div key={item.id} className='expense-item'>
           {editingId === item.id ? (

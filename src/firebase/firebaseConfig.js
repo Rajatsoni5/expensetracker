@@ -23,3 +23,6 @@ export const databaseURL = "https://expensetracker-3957a-default-rtdb.asia-south
 const database = getDatabase(app);
 
 export { database };
+
+// const auth = getAuth(app);
+// export { auth, database };

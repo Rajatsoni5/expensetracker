@@ -1,9 +1,17 @@
 import "../../styles/Auth.css";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useContextProvider } from "../../context/ContextProvider";
+import { login } from "../../reduxStore/slices/authSlice";
 
 const Login = () => {
-  const { login, toggleForm, togglePassword } = useContextProvider();
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { toggleForm, togglePassword } = useContextProvider();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,11 +22,21 @@ const Login = () => {
     setError("");
 
     try {
-      await login(email, password);
+      const userCredential = await signInWithEmailAndPassword(auth,email,password);
+      const user = userCredential.user;
+      const token = await user.getIdToken()
+      dispatch(
+        login({
+          user: user.displayName,
+          userID: user.uid,
+          bearerToken: token, 
+        })
+      );
+      navigate("/dashboard");
       setEmail("");
       setPassword("");
     } catch (err) {
-      setError(err.message);
+      setError("Invalid email or password. Please try again.");
     }
   };
 

@@ -1,16 +1,39 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-const expensesSlice = createSlice({
-    name: "expenses",
-    initialState: {
-      items: [],
-      totalAmount: 0,
-      premiumActivated: false,
+const initialExpenseState = {
+  items: [],
+  editItems: null,
+};
+
+const expenseSlice = createSlice({
+  name: "expenses",
+  initialState: initialExpenseState,
+  reducers: {
+    addItem(state, action) {
+      state.items = [action.payload, ...state.items];
     },
-    reducers: {
+    removeItem(state, action) {
+      const itemId = action.payload.id;
+      state.items = state.items.filter((item) => item.id !== itemId);
     },
-  });
-  
-  export const { } = expensesSlice.actions;
-  
-export default expensesSlice.reducer;
+    editItem(state, action) {
+      state.editItems = action.payload.item;
+      state.items = state.items.map((expense) =>
+        expense.id === state.editItems.id ? state.editItems : expense
+      );
+    },
+    setItems(state, action) {
+      state.items = action.payload;
+    },
+    setEditItemsNull(state) {
+      state.editItems = null;
+    },
+    setItemsEmpty(state) {
+      state.items = [];
+    },
+  },
+});
+
+export const {addItem, removeItem, editItem, setItems, setEditItemsNull, setItemsEmpty } = expenseSlice.actions;
+
+export default expenseSlice.reducer;
