@@ -7,13 +7,18 @@ import { useNavigate } from "react-router-dom";
 import ExpenseForm from "./ExpenseForm";
 import Modal from './ProfileModal'; 
 import { logout } from "../../reduxStore/slices/authSlice";
+import { toggleTheme, activatePremium } from "../../reduxStore/slices/themeSlice";
+
 
 function Dashboard() {
   const auth = getAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+  const isPremium = useSelector((state) => state.theme.isPremium); // Access premium status
   const expenseData = useSelector((state) => state.expenses.items);
+
   const totalExpenses = expenseData.reduce((sum, item) => sum + Number(item.amount), 0);
 
   const { user } = useSelector((state) => state.auth || { user: null });
@@ -101,7 +106,6 @@ function Dashboard() {
       console.log("No user is currently logged in.");
     }
   };
-
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -113,18 +117,36 @@ function Dashboard() {
     }
   };
 
+  const handleActivatePremium = () => {
+    if (totalExpenses > 10000) {
+      dispatch(activatePremium()); // Activate premium status
+    }
+  };
+
   return (
     <>
       <div className='dashboard-container'>
         <h4>Welcome to Expense Tracker!!!</h4>
+
         {/* ✅ Show "Activate Premium" Button if total expense > ₹10,000 */}
-      {totalExpenses > 10000 && (
-        <button className="premium-button">Activate Premium</button>
-      )}
+        {totalExpenses > 10000 && !isPremium && (
+          <button className="premium-button" onClick={handleActivatePremium}>
+            Activate Premium
+          </button>
+        )}
+
         <p>Your Profile is incomplete. <button onClick={handleProfile}> Complete now</button></p>
         {!currentUser?.emailVerified && (
           <button onClick={verifyEmail}>Verify Email</button>
         )}
+
+        {/* ✅ Show Dark Mode Toggle only if Premium is Activated */}
+        {isPremium && totalExpenses > 10000 && (
+          <button onClick={() => dispatch(toggleTheme())}>
+            {isDarkMode ? "Light Mode" : "Dark Mode"}
+          </button>
+        )}
+
         <button onClick={handleLogout}>Logout</button>
       </div>
       <hr />

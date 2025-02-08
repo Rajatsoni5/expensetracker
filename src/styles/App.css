@@ -1,0 +1,10 @@
+.light-theme {
+    background-color: white;
+    color: black;
+  }
+  
+  /* Dark Theme */
+  .dark-theme {
+    background-color: black;
+    color: white;
+  }
